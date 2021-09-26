@@ -1,6 +1,6 @@
 import sys
 import argparse
-from exceptions import *
+from src.exceptions import *
 
 STEP_RANGE = range(-1, 2, 1)
 
@@ -30,9 +30,6 @@ def count_islands(matrix) -> int:
     Function to iterate through the map. In case it encounters unvisited land,
     it initiates BFS traversal.
     """
-    if len(matrix) == 0:
-        raise ValueError("Map cannot be empty.")
-
     count = 0
     x = len(matrix[0])
     y = len(matrix)
@@ -55,17 +52,23 @@ def load_file(filename):
     try:
         with open(filename, "r") as file:
             for line in file:
-                matrix.append([int(character) for character in line if character != '\n'])
+                matrix.append([int(char) for char in line if char != '\n'])
     except ValueError:
-        raise FileLoadingError("Map file contains invalid characters.")
+        raise ValueError("Map file contains invalid characters.")
     except FileNotFoundError:
         raise FileLoadingError("Map file doesn't exist.")
     except:
         raise FileLoadingError("Couldn't open map file.")
     
     if any(any(value != 0 and value != 1 for value in row) for row in matrix):
-        raise FileLoadingError("Map file contains invalid characters.")
+        raise ValueError("Map file contains invalid characters.")
     
+    if len(matrix) == 0:
+        raise ValueError("Map cannot be empty.")
+
+    if any(len(row) != len(matrix[0]) for row in matrix):
+        raise ValueError("Map contains uneven rows.")
+
     return matrix
 
 
