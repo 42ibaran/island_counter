@@ -4,25 +4,26 @@ from src.exceptions import *
 
 STEP_RANGE = range(-1, 2, 1)
 
-def bfs(matrix, i, j, x, y, queue=[]):
+def bfs(matrix, x, y, queue=[]):
     """
     BFS traversal checks if neighboring cells are land and adds them
-    to exploration queue, then recursively visits elements in the queue.
+    to exploration queue, then visits elements in the queue until
+    queue is empty.
     """
-    matrix[i][j] = -1
-    for i_step in STEP_RANGE:
-        for j_step in STEP_RANGE:
-            next_i = i + i_step
-            next_j = j + j_step
-            if i_step == j_step == 0 or \
-                    next_i < 0 or next_i >= y or \
-                    next_j < 0 or next_j >= x:
-                continue
-            if matrix[next_i][next_j] == 1 and (next_i, next_j) not in queue:
-                queue.append((next_i, next_j))
     while len(queue) > 0:
         i, j = queue.pop()
-        bfs(matrix, i, j, x, y, queue)
+        matrix[i][j] = -1
+        for i_step in STEP_RANGE:
+            for j_step in STEP_RANGE:
+                next_i = i + i_step
+                next_j = j + j_step
+                if i_step == j_step == 0 or \
+                        next_i < 0 or next_i >= y or \
+                        next_j < 0 or next_j >= x:
+                    continue
+                if matrix[next_i][next_j] == 1 and \
+                        (next_i, next_j) not in queue:
+                    queue.append((next_i, next_j))
 
 
 def count_islands(matrix) -> int:
@@ -37,7 +38,7 @@ def count_islands(matrix) -> int:
         for j in range(x):
             if matrix[i][j] == 1:
                 count += 1
-                bfs(matrix, i, j, x, y)
+                bfs(matrix, x, y, [(i, j)])
     return count
 
 
