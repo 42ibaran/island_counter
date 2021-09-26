@@ -44,10 +44,13 @@ There is `.devcontainer` directory with a setup for development using VSCode Rem
 ## Usage
 To run the script run:
 ```
-./count_islands.sh MAP_FILENAME
+./count_islands.sh [-v] MAP_FILENAME
 ```
+`-v` option allows you to visualize the search algorithm.
+ 
 There are test maps in `tests/maps`
 You can also generate new map by running:
 ```
 ./generate_map.sh [-x X] [-y Y] [filename]
 ```
+Map generation has been tried with 10000x10000 matrix.

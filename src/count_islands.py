@@ -1,10 +1,12 @@
 import sys
+import time
 import argparse
-from src.exceptions import *
+from src.exceptions import FileLoadingError
+from src.visualization import print_map
 
 STEP_RANGE = range(-1, 2, 1)
 
-def bfs(matrix, x, y, queue=[]):
+def bfs(matrix, x, y, queue, dump):
     """
     BFS traversal checks if neighboring cells are land and adds them
     to exploration queue, then visits elements in the queue until
@@ -13,6 +15,9 @@ def bfs(matrix, x, y, queue=[]):
     while len(queue) > 0:
         i, j = queue.pop()
         matrix[i][j] = -1
+        if dump:
+            print_map(matrix, x, y, i, j)
+            time.sleep(1)
         for i_step in STEP_RANGE:
             for j_step in STEP_RANGE:
                 next_i = i + i_step
@@ -26,7 +31,7 @@ def bfs(matrix, x, y, queue=[]):
                     queue.append((next_i, next_j))
 
 
-def count_islands(matrix) -> int:
+def count_islands(matrix, visu) -> int:
     """
     Function to iterate through the map. In case it encounters unvisited land,
     it initiates BFS traversal.
@@ -38,13 +43,15 @@ def count_islands(matrix) -> int:
         for j in range(x):
             if matrix[i][j] == 1:
                 count += 1
-                bfs(matrix, x, y, [(i, j)])
+                bfs(matrix, x, y, [(i, j)], visu)
     return count
 
 
 def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument("filename", type=str)
+    parser.add_argument("-v", action='store_true',
+                        help="display algorithm visualization")
     return parser.parse_args()
 
 
@@ -77,7 +84,7 @@ if __name__ == '__main__':
     try:
         args = parse_arguments()
         matrix = load_file(args.filename)
-        count = count_islands(matrix)
+        count = count_islands(matrix, args.v)
         print(count)
     except Exception as e:
         print(e, file=sys.stderr)
