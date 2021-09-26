@@ -1,0 +1,1 @@
+python ./src/count_islands.py "$@"
