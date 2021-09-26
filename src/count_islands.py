@@ -56,10 +56,16 @@ def load_file(filename):
         with open(filename, "r") as file:
             for line in file:
                 matrix.append([int(character) for character in line if character != '\n'])
+    except ValueError:
+        raise FileLoadingError("Map file contains invalid characters.")
     except FileNotFoundError:
         raise FileLoadingError("Map file doesn't exist.")
     except:
         raise FileLoadingError("Couldn't open map file.")
+    
+    if any(any(value != 0 and value != 1 for value in row) for row in matrix):
+        raise FileLoadingError("Map file contains invalid characters.")
+    
     return matrix
 
 
