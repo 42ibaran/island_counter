@@ -12,5 +12,5 @@ MAP_FILES = [
 def test_all_maps():
     for filename, expected_result in MAP_FILES:
         matrix = load_file(filename)
-        count = count_islands(matrix)
+        count = count_islands(matrix, False)
         assert count == expected_result
