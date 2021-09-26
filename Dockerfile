@@ -5,6 +5,7 @@ COPY src ./src
 COPY tests ./tests
 COPY setup.py ./
 COPY count_islands.sh ./
+COPY generate_map.sh ./
 COPY requirements.txt ./
 
 RUN pip3 install -r requirements.txt
