@@ -13,7 +13,7 @@ def bfs(matrix, x, y, queue, dump):
     queue is empty.
     """
     while len(queue) > 0:
-        i, j = queue.pop()
+        i, j = queue.pop(0)
         matrix[i][j] = -1
         if dump:
             print_map(matrix, x, y, i, j)
