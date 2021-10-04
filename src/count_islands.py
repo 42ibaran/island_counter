@@ -89,9 +89,8 @@ def load_file(filename: str) -> list:
         matrix (list): 2D array with the map
 
     Raises:
-        ValueError: Map file contains invalid characters, empty or contains
-        uneven rows
-        FileNotFoundError: Map file doesn't exist
+        ValueError: Map file is empty, contains invalid characters or uneven
+        rows
         FileLoadingError: Map file doesn't exist or couldn't be open
     """
     matrix = []
