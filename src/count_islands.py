@@ -6,17 +6,32 @@ from src.visualization import print_map
 
 STEP_RANGE = range(-1, 2, 1)
 
-def bfs(matrix, x, y, queue, dump):
+def bfs(matrix: list,
+        i: int,
+        j: int,
+        x: int,
+        y: int,
+        visu: bool
+        ) -> None:
     """
     BFS traversal checks if neighboring cells are land and adds them
     to exploration queue, then visits elements in the queue until
     queue is empty.
+
+    Parameters:
+        matrix (list): 2D array
+        i (int): coordinate of starting position on y-axis
+        j (int): coordinate of starting position on x-axis
+        x (int): width of the matrix
+        y (int): height of the matrix
+        visu (bool): enables algorithm visualization
     """
+    queue = [(i, j)]
     while len(queue) > 0:
         i, j = queue.pop(0)
         matrix[i][j] = -1
-        if dump:
-            print_map(matrix, x, y, i, j)
+        if visu:
+            print_map(matrix, i, j, x, y)
             time.sleep(1)
         for i_step in STEP_RANGE:
             for j_step in STEP_RANGE:
@@ -31,10 +46,17 @@ def bfs(matrix, x, y, queue, dump):
                     queue.append((next_i, next_j))
 
 
-def count_islands(matrix, visu) -> int:
+def count_islands(matrix: list, visu: bool) -> int:
     """
-    Function to iterate through the map. In case it encounters unvisited land,
+    Iterates through the map. In case it encounters unvisited land,
     it initiates BFS traversal.
+
+    Parameters:
+        matrix (list): 2D array
+        visu (bool): enables algorithm visualization
+
+    Returns:
+        count (int): Number of islands in the matrix
     """
     count = 0
     x = len(matrix[0])
@@ -43,11 +65,12 @@ def count_islands(matrix, visu) -> int:
         for j in range(x):
             if matrix[i][j] == 1:
                 count += 1
-                bfs(matrix, x, y, [(i, j)], visu)
+                bfs(matrix, i, j, x, y, visu)
     return count
 
 
 def parse_arguments():
+    """Parses command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument("filename", type=str)
     parser.add_argument("-v", action='store_true',
@@ -55,7 +78,22 @@ def parse_arguments():
     return parser.parse_args()
 
 
-def load_file(filename):
+def load_file(filename: str) -> list:
+    """
+    Loads a file with a map into a 2D array.
+
+    Parameters:
+        filename (str): Name of the file with the map
+
+    Returns:
+        matrix (list): 2D array with the map
+
+    Raises:
+        ValueError: Map file contains invalid characters, empty or contains
+        uneven rows
+        FileNotFoundError: Map file doesn't exist
+        FileLoadingError: Map file doesn't exist or couldn't be open
+    """
     matrix = []
     try:
         with open(filename, "r") as file:

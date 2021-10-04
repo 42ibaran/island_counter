@@ -5,6 +5,7 @@ import numpy as np
 ISLAND_P = 0.3
 
 def parse_arguments():
+    """Parses command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument("filename", type=str, nargs='?', default='map.txt')
     parser.add_argument("-x", type=int, default=10)
